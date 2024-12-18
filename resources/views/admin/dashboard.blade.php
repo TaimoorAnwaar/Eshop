@@ -98,7 +98,7 @@
     h2, h4 {
         font-family: 'Arial', sans-serif;
         font-weight: 600;
-        color: #343a40;
+        color: #2a3036;
     }
 </style>
 @endsection
