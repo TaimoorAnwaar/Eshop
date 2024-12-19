@@ -340,7 +340,7 @@
 <!-- Notification Modal -->
 @auth
 @if (Auth::user()->hasRole('manager'))
-<div class="modal fade" id="notificationsModal" tabindex="-1" aria-labelledby="notificationsModalLabel" aria-hidden="true">
+<div class="modal fade " id="notificationsModal" tabindex="-1" aria-labelledby="notificationsModalLabel" aria-hidden="true">
     <style>
         .modal-content {
             border-radius: 15px;
@@ -377,7 +377,7 @@
 
         .list-group-item:hover {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-            transform: translateY(-2px);
+            transform: translateY(-8px);
         }
 
         .list-group-item h5 {
