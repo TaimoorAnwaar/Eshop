@@ -103,13 +103,19 @@
                    `);
                },
                error: function () {
-                   $('#product-detail-content').html('<p class="text-danger text-center">Failed to load product details.</p>');
-               }
+                Swal.fire({
+                    title: 'Error',
+                    text:  'you are not logged in.',
+                    icon: 'error',
+                });               }
            });
        });
 
        
        $('.add-to-cart').click(function () {
+    var productId = $(this).data('id'); 
+
+    $('.add-to-cart').click(function () {
     var productId = $(this).data('id'); 
 
     $.ajax({
@@ -120,36 +126,42 @@
         },
         success: function (response) {
             if (response.success) {
-               
-                $('#cart-count').text(response.cart_count);
-                swal.fire({
-                    title:'Success',
-                    text:'Product added successfully',
-                    icon:'success',
+                const cartCount = response.cart_count; 
+                const cartBadge = $('#cart-count');
+
+                cartBadge.text(cartCount); 
+                
+                if (cartCount > 0) {
+                    cartBadge.removeClass('d-none');
+                }
+
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Product added successfully!',
+                    icon: 'success',
+                    confirmButtonColor: '#4CAF50', 
                 });
             } else {
-                // alert(response.error || 'Failed to add product to cart.');
-                swal.fire(
-                    {
-                        title: 'Error',
-                        text:"Failed to add to cart",
-                        icon:'Error',
-                    }
-                );
+               
+                Swal.fire({
+                    title: 'Error',
+                    text: response.error || 'Failed to add product to cart.',
+                    icon: 'error',
+                });
             }
         },
         error: function () {
-            // alert('Something went wrong while adding the product to the cart.');
+            
             Swal.fire({
-    title: "Error",
-    text: "You are not logged in.",
-    icon: "error",
- 
-    
-    showCancelButton: false,
-});
+                title: 'Error',
+                text: 'You are not logged in.',
+                icon: 'error',
+                confirmButtonColor: '#FF0000', 
+            });
         }
     });
+});
+
 });
 
 

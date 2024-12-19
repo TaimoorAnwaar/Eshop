@@ -68,6 +68,13 @@ class CheckoutController extends Controller
 
         
         CartItem::where('user_id', $userId)->delete();
+        $cartCount = CartItem::where('user_id', $userId)->sum('quantity');
+        session()->put('cart-count', $cartCount); 
+       
+       
+       
+       
+       
         // for notification
         $managers = User::where('role', 'manager')->get();
 

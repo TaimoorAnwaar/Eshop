@@ -74,19 +74,26 @@
             position: relative;
         }
         .fa-envelope {
-        font-size: 30px; /* Default size */
-        transition: transform 0.3s ease; /* Smooth animation */
+        font-size: 30px; 
+        transition: transform 0.3s ease; 
     }
 
     .fa-envelope:hover {
-        transform: scale(1.5); /* Increases size by 1.5x */
+        transform: scale(1.5); 
     }
-    .fa-bell{  font-size: 30px; /* Default size */
+   
+    .fa-shopping-cart:hover{
+         
+        transform: scale(1.5); 
+
+
+    }
+    .fa-bell{  font-size: 30px; 
         transition: transform 0.3s ease;
 
     }
     .fa-bell:hover {
-        transform: scale(1.5); /* Increases size by 1.5x */
+        transform: scale(1.5); 
     }
 
         .badge {
@@ -200,19 +207,25 @@
             <!-- Cart & Notifications -->
             @auth
             @if (Auth::user()->hasRole('customer'))
-                <li class="nav-item nav-link">
-                    <a href="{{ route('cart.view') }}" class="position-relative">
-                        <i class="fa fa-shopping-cart"></i>
-                        <span class="badge text-dark" id="cart-count">{{ session('cart-count', 0) }}</span>
-                    </a>
-                </li>
+            <li class="nav-item nav-link">
+                <a href="{{ route('cart.view') }}" class="position-relative">
+                    <i class="fa fa-shopping-cart"></i>
+                    <span 
+                        class="badge text-dark {{ session('cart-count', 0) > 0 ? '' : 'd-none' }}" 
+                        id="cart-count">
+                        {{ session('cart-count', 0) }}
+                    </span>
+                </a>
+            </li>
+            
             @elseif (Auth::user()->hasRole('manager'))
-                <li class="nav-item nav-link">
-                    <a href="#" class="position-relative" data-bs-toggle="modal" data-bs-target="#notificationsModal">
-                        <i class="fa fa-bell"></i>
-                        <span class="badge" id="notification-count">{{ auth()->user()->unreadNotifications->count() }}</span>
-                    </a>
-                </li>
+            <li class="nav-item nav-link">
+                <a href="#" class="position-relative" data-bs-toggle="modal" data-bs-target="#notificationsModal">
+                    <i class="fa fa-bell"></i>
+                    <span class="badge" id="notification-count">{{ auth()->user()->unreadNotifications->count() }}</span>
+                </a>
+            </li>
+            
                 <li class="nav-item nav-link">
                     <a href="{{ route('manager.messages.view') }}" class="position-relative text-white"  >
                         <i class="fa fa-envelope"></i>
@@ -274,31 +287,27 @@
         </script> --}}
         <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
 <script>
-    // Enable logging for debugging (optional)
     Pusher.logToConsole = true;
 
-    // Initialize Pusher
+   
     const pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
         cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
         encrypted: true
     });
 
-    // Get the current manager ID
+   
     const managerId = "{{ auth()->id() }}";
 
-    // Subscribe to the Pusher channel for real-time updates
+   
     const channel = pusher.subscribe('manager.messages.' + managerId);
 
-    // Listen for the MessageSent event and update the message count dynamically
     channel.bind('MessageSent', function(data) {
         console.log("New message received:", data);
         updateMessageCount(data.count);
     });
 
-    // Fetch the initial message count when the page loads
     fetchMessageCount();
 
-    // Function to fetch the message count from the server
     function fetchMessageCount() {
         fetch('{{ route('messages.count') }}')
             .then(response => response.json())
@@ -308,12 +317,10 @@
             .catch(error => console.error('Error fetching message count:', error));
     }
 
-    // Function to update the message count in the DOM
     function updateMessageCount(count) {
         const messageCountElement = document.getElementById('message-count');
         messageCountElement.innerText = count;
 
-        // Optionally hide the count badge if there are no messages
         if (count > 0) {
             messageCountElement.style.display = 'inline-block';
         } else {

@@ -18,7 +18,7 @@
             <div class="card shadow-lg border-light rounded-lg">
                 <div class="card-body">
                     <h5 class="card-title text-primary fw-bold text-center">Send Us a Message</h5>
-                    <form action="{{ route('contact.submit') }}" method="POST">
+                    <form action="{{ route('contact.submit') }}" method="POST" id="contact-form">
                         @csrf
                         <div class="mb-3">
                             <label for="name" class="form-label">Your Name</label>
@@ -61,13 +61,13 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
     $(document).ready(function () {
-       
         $('#contact-form').on('submit', function (e) {
-            e.preventDefault(); 
+            e.preventDefault();
 
-            
             let formData = {
                 _token: '{{ csrf_token() }}',
                 name: $('#name').val(),
@@ -75,28 +75,33 @@
                 message: $('#message').val()
             };
 
-            $('#alert-container').html('');
-
             $.ajax({
                 url: '{{ route("contact.submit") }}',
                 type: 'POST',
                 data: formData,
                 success: function (response) {
-                    $('#alert-container').html(
-                        '<div class="alert alert-success">Your message has been sent successfully!</div>'
-                    );
+                    Swal.fire({
+                        title: 'Success',
+                        text: 'Message sent successfully!',
+                        icon: 'success',
+                        confirmButtonColor: '#4CAF50',
+                    });
                     $('#contact-form')[0].reset();
                 },
                 error: function (xhr) {
-                    let errorMessage = xhr.responseJSON?.message || 'An error occurred. Please try again.';
-                    $('#alert-container').html(
-                        '<div class="alert alert-danger">' + errorMessage + '</div>'
-                    );
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Failed to send the message. Please try again.',
+                        icon: 'error',
+                        confirmButtonColor: '#FF0000',
+                    });
                 }
             });
         });
     });
 </script>
+
+
 
 
 <style>
