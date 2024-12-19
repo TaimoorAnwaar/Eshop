@@ -7,11 +7,7 @@
     <h1 class="text-center text-primary mb-4">Admin Dashboard</h1>
     <h2 class="text-center mb-4">List of Products</h2>
 
-    <div class="text-center mt-4">
-        <a href="{{ route('manager.messages.view') }}" class="btn btn-success btn-lg">
-            View Manager Messages
-        </a>
-    </div>
+   
     
     
     <div class="row justify-content-center" id="product-list">
